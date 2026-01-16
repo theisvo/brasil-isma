@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Isma Brasil</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <style>
+        body { background-color: #1a1a1a; color: white; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .card { background: #2d2d2d; padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        h2 { color: #44ff44; text-align: center; font-size: 1.2rem; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; font-size: 1rem; }
+        button { width: 100%; padding: 15px; background: #006400; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        #resultado { margin-top: 20px; line-height: 1.5; font-size: 0.95rem; }
+        .success { color: #44ff44; font-weight: bold; font-size: 1.1rem; }
+        .error { color: #ff4444; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Cotizaciones Pra Brasiuul By Isma</h2>
+        <input type="number" id="dp" placeholder="Dólar/Peso Arg (ej: 1490)">
+        <input type="number" id="dr" placeholder="Dólar/Real Br (ej: 5.5)">
+        <input type="number" id="pp" placeholder="PIX/Peso (ej: 290)">
+        <button py-click="calcular">CALCULAR</button>
+        <div id="resultado">Ingresá los valores y tocá calcular</div>
+    </div>
+
+    <script type="py">
+        from pyscript import display, document
+
+        def calcular(event):
+            try:
+                # Obtenemos valores de los inputs
+                dp = float(document.querySelector("#dp").value)
+                dr = float(document.querySelector("#dr").value)
+                pp = float(document.querySelector("#pp").value)
+
+                costo_tarjeta = dp / dr
+                costo_pix = pp
+                
+                dolar_arg_empate = pp * dr
+                dolar_br_empate = dp / pp
+                
+                res_div = document.querySelector("#resultado")
+
+                if costo_tarjeta < costo_pix:
+                    dif = costo_pix - costo_tarjeta
+                    msg = f'<div class="success">✅ CONVIENE TARJETA</div>'
+                    msg += f'Costo Real: ${costo_tarjeta:.2f}<br>'
+                    msg += f'Con PIX pagarías ${costo_pix:.2f} (+${dif:.2f} más caro)<br><br>'
+                    msg += f'<b>Para que convenga PIX:</b><br>'
+                    msg += f'• Dol. Arg debe subir a ${dolar_arg_empate:.2f}<br>'
+                    msg += f'• O Dol. Br bajar a {dolar_br_empate:.2f} R$'
+                else:
+                    dif = costo_tarjeta - costo_pix
+                    msg = f'<div class="success">✅ CONVIENE PIX</div>'
+                    msg += f'Costo Real: ${costo_pix:.2f}<br>'
+                    msg += f'Con Tarjeta pagarías ${costo_tarjeta:.2f} (+${dif:.2f} más caro)<br><br>'
+                    msg += f'<b>Para que convenga TARJETA:</b><br>'
+                    msg += f'• Dol. Arg debe bajar a ${dolar_arg_empate:.2f}<br>'
+                    msg += f'• O Dol. Br subir a {dolar_br_empate:.2f} R$'
+                
+                res_div.innerHTML = msg
+            except:
+                document.querySelector("#resultado").innerHTML = '<span class="error">Ingresá números válidos</span>'
+    </script>
+</body>
+</html>
