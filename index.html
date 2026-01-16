@@ -10,11 +10,14 @@
         body { background-color: #1a1a1a; color: white; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
         .card { background: #2d2d2d; padding: 20px; border-radius: 15px; max-width: 400px; width: 100%; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
         h2 { color: #44ff44; text-align: center; font-size: 1.2rem; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; font-size: 1rem; }
-        button { width: 100%; padding: 15px; background: #006400; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        #resultado { margin-top: 20px; line-height: 1.5; font-size: 0.95rem; }
-        .success { color: #44ff44; font-weight: bold; font-size: 1.1rem; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #3d3d3d; color: white; box-sizing: border-box; font-size: 1rem; }
+        button { width: 100%; padding: 15px; background: #006400; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 1.1rem; }
+        #resultado { margin-top: 20px; line-height: 1.6; font-size: 1rem; border-top: 1px solid #444; padding-top: 15px; }
+        .success { color: #44ff44; font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; }
         .error { color: #ff4444; }
+        /* Esta es la clase que hace el texto rojo */
+        .rojo { color: #ff4444; font-weight: bold; }
+        .empate-box { background: #222; padding: 10px; border-radius: 5px; margin-top: 10px; font-size: 0.9rem; color: #bbb; }
     </style>
 </head>
 <body>
@@ -32,7 +35,6 @@
 
         def calcular(event):
             try:
-                # Obtenemos valores de los inputs
                 dp = float(document.querySelector("#dp").value)
                 dr = float(document.querySelector("#dr").value)
                 pp = float(document.querySelector("#pp").value)
@@ -48,23 +50,25 @@
                 if costo_tarjeta < costo_pix:
                     dif = costo_pix - costo_tarjeta
                     msg = f'<div class="success">✅ CONVIENE TARJETA</div>'
-                    msg += f'Costo Real: ${costo_tarjeta:.2f}<br>'
-                    msg += f'Con PIX pagarías ${costo_pix:.2f} (+${dif:.2f} más caro)<br><br>'
-                    msg += f'<b>Para que convenga PIX:</b><br>'
+                    msg += f'Pagas el Real a: <b>${costo_tarjeta:.2f}</b><br>'
+                    # Aquí aplicamos la clase "rojo"
+                    msg += f'Con PIX pagarías ${costo_pix:.2f} (<span class="rojo">+{dif:.2f} más caro</span>)<br>'
+                    msg += f'<div class="empate-box"><b>Para que convenga PIX:</b><br>'
                     msg += f'• Dol. Arg debe subir a ${dolar_arg_empate:.2f}<br>'
-                    msg += f'• O Dol. Br bajar a {dolar_br_empate:.2f} R$'
+                    msg += f'• O Dol. Br bajar a {dolar_br_empate:.2f} R$</div>'
                 else:
                     dif = costo_tarjeta - costo_pix
                     msg = f'<div class="success">✅ CONVIENE PIX</div>'
-                    msg += f'Costo Real: ${costo_pix:.2f}<br>'
-                    msg += f'Con Tarjeta pagarías ${costo_tarjeta:.2f} (+${dif:.2f} más caro)<br><br>'
-                    msg += f'<b>Para que convenga TARJETA:</b><br>'
+                    msg += f'Pagas el Real a: <b>${costo_pix:.2f}</b><br>'
+                    # Aquí aplicamos la clase "rojo"
+                    msg += f'Con Tarjeta pagarías ${costo_tarjeta:.2f} (<span class="rojo">+{dif:.2f} más caro</span>)<br>'
+                    msg += f'<div class="empate-box"><b>Para que convenga TARJETA:</b><br>'
                     msg += f'• Dol. Arg debe bajar a ${dolar_arg_empate:.2f}<br>'
-                    msg += f'• O Dol. Br subir a {dolar_br_empate:.2f} R$'
+                    msg += f'• O Dol. Br subir a {dolar_br_empate:.2f} R$</div>'
                 
                 res_div.innerHTML = msg
             except:
-                document.querySelector("#resultado").innerHTML = '<span class="error">Ingresá números válidos</span>'
+                document.querySelector("#resultado").innerHTML = '<span class="error">⚠️ Por favor, ingresá números válidos</span>'
     </script>
 </body>
 </html>
